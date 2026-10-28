@@ -1,4 +1,4 @@
-# Python, R, Numpy, Pandas, Matplotlib Notebook
+# ML: Python & R Data Science Notebooks
 
 A personal learning notebook project by **Vamshi Krishna Adam**, covering Python programming, R, numerical computing, data manipulation, visualization, and introductory machine learning.
 
