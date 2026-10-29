@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {generateData,fitLine,toCSV} from '../dist/model.js';
+import {lessons} from '../dist/lessons.js';
+test('recovers known exact line',()=>{const f=fitLine([{x:0,y:1},{x:1,y:3},{x:2,y:5}]);assert.equal(f.slope,2);assert.equal(f.intercept,1);assert.equal(f.r2,1);assert.equal(f.rmse,0);});
+test('negative slope and noise-free experiment',()=>{const f=fitLine(generateData(-3,0,60));assert.ok(Math.abs(f.slope+3)<1e-12);assert.ok(f.rmse<1e-12);assert.equal(f.r2,1);});
+test('constant target reports undefined R squared',()=>{const f=fitLine(generateData(0,0,12));assert.equal(f.r2,null);assert.equal(f.rmse,0);});
+test('rejects degenerate inputs',()=>{assert.throws(()=>fitLine([{x:1,y:2},{x:1,y:3}]));assert.throws(()=>generateData(2,1,1));assert.throws(()=>fitLine([{x:0,y:NaN},{x:1,y:2}]));});
+test('slider boundaries produce finite models and exact CSV row counts',()=>{for(const slope of [-4,0,4])for(const noise of [0,6])for(const n of [12,30,60]){const points=generateData(slope,noise,n);const f=fitLine(points);assert.ok(Number.isFinite(f.slope));assert.ok(Number.isFinite(f.rmse));assert.equal(toCSV(points).trim().split('\n').length,n+1);assert.deepEqual(points,generateData(slope,noise,n));}});
+test('lesson IDs unique and code downloads populated',()=>{assert.equal(new Set(lessons.map(l=>l.id)).size,8);assert.ok(lessons.every(l=>l.code && ['py','R'].includes(l.extension)));});
