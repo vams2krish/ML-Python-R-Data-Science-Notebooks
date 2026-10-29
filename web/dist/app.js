@@ -33,7 +33,7 @@ $('complete').addEventListener('click', () => {
   $('complete').textContent=completed.has(active.id)?'Mark as incomplete':'Mark as completed ✓'; renderLessons();
 });
 function download(text,name,type) {const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-$('download-example').addEventListener('click',()=>{if(active)download(active.code+'\n',active.id+'.'+active.extension,'text/plain');});
+$('download-example').addEventListener('click',()=>{if(active)download(active.code+'\n','lesson-'+active.id+'.'+active.extension,'text/plain');});
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{topic=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderLessons();}));
 $('search').addEventListener('input',renderLessons);
 function updateModel() {
